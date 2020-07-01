@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.toy.www.dao.UserDao">
+    <resultMap id="userField" type="cn.toy.www.dingding.User">
+        <id column="id" property="id"/>
+        <result column="revision" property="revision"/>
+        <result column="create_by" property="createBy"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_by" property="updateBy"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="is_delete" property="delete"/>
+        <result column="mobile" property="mobile"/>
+        <result column="user_name" property="userName"/>
+        <result column="password" property="password"/>
+        <result column="name" property="name"/>
+        <result column="department" property="department"/>
+        <result column="hired_date" property="hiredDate"/>
+        <result column="position" property="position"/>
+        <result column="status" property="status"/>
+        <result column="is_leader" property="leader"/>
+        <result column="email" property="email"/>
+        <result column="jobnumber" property="jobnumber"/>
+        <result column="is_admin" property="admin"/>
+        <result column="avatar" property="avatar"/>
+        <result column="user_id" property="userid"/>
+        <result column="is_boss" property="boss"/>
+        <result column="management_platform" property="managementPlatform"/>
+    </resultMap>
+
+    <select id="findById" parameterType="java.lang.Long" resultMap="userField">
+        SELECT
+          `id`,
+          `revision`,
+          `create_by`,
+          `create_time`,
+          `update_by`,
+          `update_time`,
+          `is_delete`,
+          `mobile`,
+          `user_name`,
+          `password`,
+          `name`,
+          `department`,
+          `hired_date`,
+          `position`,
+          `status`,
+          `is_leader`,
+          `email`,
+          `jobnumber`,
+          `is_admin`,
+          `avatar`,
+          `is_boss`,
+          `management_platform`,
+          `user_id`
+        FROM distributed_user
+        WHERE id = #{id}
+        AND is_delete = 0
+    </select>
+
+    <select id="getUserByCorpUserId" parameterType="java.lang.String" resultMap="userField">
+        SELECT
+          `id`,
+          `revision`,
+          `create_by`,
+          `create_time`,
+          `update_by`,
+          `update_time`,
+          `is_delete`,
+          `mobile`,
+          `user_name`,
+          `password`,
+          `name`,
+          `department`,
+          `hired_date`,
+          `position`,
+          `status`,
+          `is_leader`,
+          `email`,
+          `jobnumber`,
+          `is_admin`,
+          `avatar`,
+          `is_boss`,
+          `management_platform`,
+          `user_id`
+        FROM distributed_user
+        WHERE user_id = #{userId}
+        AND is_delete = 0
+    </select>
+
+    <select id="getUserByMobile" parameterType="java.lang.String" resultMap="userField">
+        SELECT
+          `id`,
+          `revision`,
+          `create_by`,
+          `create_time`,
+          `update_by`,
+          `update_time`,
+          `is_delete`,
+          `mobile`,
+          `user_name`,
+          `password`,
+          `name`,
+          `department`,
+          `hired_date`,
+          `position`,
+          `status`,
+          `is_leader`,
+          `email`,
+          `jobnumber`,
+          `is_admin`,
+          `avatar`,
+          `user_id`,
+          `management_platform`,
+          `is_boss`
+        FROM distributed_user
+        WHERE mobile = #{mobile}
+        AND is_delete = 0
+    </select>
+
+    <update id="updateUser" parameterType="cn.toy.www.dingding.User">
+        update distributed_user
+        <set>
+            <if test="id != null">id = #{id},</if>
+            <if test="name != null">name = #{name},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="password != null">password = #{password},</if>
+            <if test="email != null">email = #{email},</if>
+            <if test="mobile != null">mobile = #{mobile},</if>
+            <if test="avatar != null">avatar = #{avatar},</if>
+            <if test="userName != null">user_name = #{userName},</if>
+            <if test="position != null">position = #{position},</if>
+            <if test="userid != null">user_id = #{userid},</if>
+            <if test="leader != null">is_leader = #{leader},</if>
+            <if test="admin != null">is_admin = #{admin},</if>
+            <if test="boss != null">is_boss = #{boss},</if>
+            <if test="department != null">department = #{department},</if>
+            <if test="jobnumber != null">jobnumber = #{jobnumber},</if>
+            <if test="hiredDate != null">hired_date = #{hiredDate},</if>
+            <if test="managementPlatform!= null">management_platform = #{managementPlatform},</if>
+            <if test="updateBy!= null">update_by = #{updateBy},</if>
+            update_time = NOW()
+        </set>
+        where id = #{id}
+    </update>
+
+    <update id="updateStatus">
+        UPDATE distributed_user
+        SET status = #{status}, revision = revision + 1, update_by = #{updateBy}, update_time = NOW()
+        WHERE id = #{id}
+    </update>
+
+    <update id="deleteUser">
+        UPDATE distributed_user
+        SET is_delete = 1, revision = revision + 1, update_by = #{updateBy}, update_time = NOW()
+        WHERE id = #{id}
+    </update>
+
+    <update id="resetPassword">
+        UPDATE distributed_user
+        SET password = #{password}, revision = revision + 1, update_by = #{updateBy}, update_time = NOW()
+        WHERE id = #{id}
+    </update>
+
+    <insert id="saveUser" useGeneratedKeys="true" keyProperty="id" parameterType="cn.toy.www.dingding.User">
+        insert into distributed_user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="name != null">name,</if>
+            <if test="status != null">status,</if>
+            <if test="password != null">password,</if>
+            <if test="email != null">email,</if>
+            <if test="mobile != null">mobile,</if>
+            <if test="avatar != null">avatar,</if>
+            <if test="userName != null">user_name,</if>
+            <if test="position != null">position,</if>
+            <if test="userid != null">user_id,</if>
+            <if test="leader != null">is_leader,</if>
+            <if test="admin != null">is_admin,</if>
+            <if test="boss != null">is_boss,</if>
+            <if test="department != null">department,</if>
+            <if test="jobnumber != null">jobnumber,</if>
+            <if test="hiredDate != null">hired_date,</if>
+            <if test="managementPlatform != null">management_platform,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="updateBy!= null">update_by,</if>
+            create_time,
+            update_time
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="name != null">#{name},</if>
+            <if test="status != null">#{status},</if>
+            <if test="password != null">#{password},</if>
+            <if test="email != null">#{email},</if>
+            <if test="mobile != null">#{mobile},</if>
+            <if test="avatar != null">#{avatar},</if>
+            <if test="userName != null">#{userName},</if>
+            <if test="position != null">#{position},</if>
+            <if test="userid != null">#{userid},</if>
+            <if test="leader != null">#{leader},</if>
+            <if test="admin != null">#{admin},</if>
+            <if test="boss != null">#{boss},</if>
+            <if test="department != null">#{department},</if>
+            <if test="jobnumber != null">#{jobnumber},</if>
+            <if test="hiredDate != null">#{hiredDate},</if>
+            <if test="managementPlatform != null">#{managementPlatform},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            NOW(),
+            NOW()
+        </trim>
+    </insert>
+
+    <select id="selectPage" parameterType="cn.toy.www.request.QueryUserListRequest"
+            resultType="cn.toy.www.vo.UserListVO">
+        SELECT
+        u.`id` AS 'id',
+        u.`NAME` AS 'name',
+        u.`position` AS 'position',
+        u.`mobile` AS 'mobile',
+        u.`hired_date` AS 'hiredDate',
+        u.`email` AS 'email',
+        u.`status` AS 'status',
+        u.`department` AS 'department',
+        u.`avatar` AS 'avatar',
+        r.`role_name` AS 'roleName',
+        r.`id` AS 'roleId'
+        FROM
+        `distributed_user` u
+        LEFT JOIN `distributed_user_role` ur ON u.id = ur.user_id
+        LEFT JOIN `distributed_role` r ON r.id = ur.role_id
+        WHERE
+        u.is_delete = 0
+        <if test="param != null and param != ''">
+            AND (
+            u.mobile LIKE CONCAT ('%', #{param}, '%') or u.name LIKE CONCAT ('%', #{param}, '%')
+            )
+        </if>
+    </select>
+
+    <select id="queryUserSelectedList" resultType="cn.toy.www.vo.UserSelectedListVO">
+        SELECT
+        `id` AS 'id',
+        `name` AS 'name'
+        FROM
+        `distributed_user`
+        WHERE
+        is_delete = 0
+    </select>
+</mapper>

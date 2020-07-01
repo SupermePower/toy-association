@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.toy.www.dao.UserRoleDao">
+    <resultMap id="userRoleDao" type="cn.toy.www.model.UserRole">
+        <id column="id" property="id"/>
+        <result column="create_by" property="createBy"/>
+        <result column="create_time" property="createTime"/>
+        <result column="is_delete" property="delete"/>
+        <result column="revision" property="revision"/>
+        <result column="role_id" property="roleId"/>
+        <result column="update_by" property="updateBy"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="user_id" property="userId"/>
+    </resultMap>
+    <select id="findAll" resultMap="userRoleDao">select * from distributed_user_role where is_delete = '0'</select>
+    <select id="findById" resultMap="userRoleDao"
+            parameterType="java.lang.Long">select * from distributed_user_role where id = #{id} and is_delete = '0'</select>
+    <delete id="deleteById"
+            parameterType="java.lang.Long">update distributed_user_role set is_delete = '1' where id = #{id}</delete>
+    <update id="update" parameterType="cn.toy.www.model.UserRole">
+        update distributed_user_role
+        <set>
+            <if test="roleId != null">role_id=#{roleId},</if>
+            <if test="updateBy != null">update_by=#{updateBy},</if>
+            <if test="updateTime != null">update_time=#{updateTime},</if>
+            <if test="userId != null">user_id=#{userId},</if>
+            revision = revision + 1
+        </set>
+        where id = #{id}
+    </update>
+    <insert id="save" useGeneratedKeys="true" keyProperty="id" parameterType="cn.toy.www.model.UserRole">
+        insert into distributed_user_role
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="createBy != null">create_by,</if>
+            <if test="id != null">id,</if>
+            <if test="roleId != null">role_id,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="userId != null">user_id,</if>
+            create_time,
+            update_time
+        </trim>
+        <trim prefix="values(" suffix=")" suffixOverrides=",">
+            <if test="createBy != null">#{createBy},</if>
+            <if test="id != null">#{id},</if>
+            <if test="roleId != null">#{roleId},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="userId != null">#{userId},</if>
+            NOW(),
+            NOW()
+        </trim>
+    </insert>
+
+    <delete id="deleteByUserId" parameterType="java.lang.Long">
+        DELETE FROM distributed_user_role WHERE user_id = #{userId}
+    </delete>
+
+    <select id="findByUserId" parameterType="java.lang.Long" resultMap="userRoleDao">
+        SELECT * FROM distributed_user_role WHERE user_id = #{userId}
+    </select>
+
+    <select id="findByRoleId" parameterType="java.lang.Long" resultMap="userRoleDao">
+        SELECT * FROM distributed_user_role WHERE role_id = #{roleId}
+    </select>
+</mapper>

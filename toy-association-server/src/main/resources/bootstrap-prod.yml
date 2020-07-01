@@ -1,0 +1,31 @@
+spring:
+  application:
+    name: movie-service
+
+server:
+  port: 8080
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://business-test.xiongmaoxingchu.com:8900/eureka/
+  instance:
+    hostname: ${spring.cloud.client.ip-address}
+
+feign:
+  hystrix:
+    enabled: true
+
+hystrix:
+  threadpool:
+    default:
+      coreSize: 300
+      maximumSize: 1000
+      maxQueueSize: 500
+      queueSizeRejectionThreshold: 1500
+  command:
+    default:
+      execution:
+        timeout:
+          #如果enabled设置为false,则请求超时交给ribbon控制
+          enabled: false

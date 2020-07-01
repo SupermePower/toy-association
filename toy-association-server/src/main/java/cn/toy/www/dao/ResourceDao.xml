@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.toy.www.dao.ResourceDao">
+    <resultMap id="resourceDao" type="cn.toy.www.model.Resource">
+        <id column="id" property="id"/>
+        <result column="create_by" property="createBy"/>
+        <result column="create_time" property="createTime"/>
+        <result column="is_delete" property="delete"/>
+        <result column="parent_id" property="parentId"/>
+        <result column="resource_icon" property="resourceIcon"/>
+        <result column="resource_icon_active" property="resourceIconActive"/>
+        <result column="resource_name" property="resourceName"/>
+        <result column="resource_url" property="resourceUrl"/>
+        <result column="revision" property="revision"/>
+        <result column="update_by" property="updateBy"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+    <select id="findAll" resultMap="resourceDao">select * from distributed_resource where is_delete = '0'</select>
+    <select id="findById" resultMap="resourceDao"
+            parameterType="java.lang.Long">select * from distributed_resource where id = #{id} and is_delete = '0'</select>
+    <delete id="deleteById"
+            parameterType="java.lang.Long">update distributed_resource set is_delete = '1' where id = #{id}</delete>
+    <update id="update" parameterType="cn.toy.www.model.Resource">
+        update distributed_resource
+        <set>
+            <if test="createBy != null">create_by=#{createBy},</if>
+            <if test="createTime != null">create_time=#{createTime},</if>
+            <if test="delete != null">is_delete=#{delete},</if>
+            <if test="parentId != null">parent_id=#{parentId},</if>
+            <if test="resourceIcon != null">resource_icon=#{resourceIcon},</if>
+            <if test="resourceIconActive != null">resource_icon_active=#{resourceIconActive},</if>
+            <if test="resourceName != null">resource_name=#{resourceName},</if>
+            <if test="resourceUrl != null">resource_url=#{resourceUrl},</if>
+            <if test="revision != null">revision=#{revision},</if>
+            <if test="updateBy != null">update_by=#{updateBy},</if>
+            <if test="updateTime != null">update_time=#{updateTime},</if>
+            <if test="explanation != null">explanation=#{explanation},</if>
+        </set>
+        where id = #{id}
+    </update>
+    <insert id="save" useGeneratedKeys="true" keyProperty="id" parameterType="cn.toy.www.model.Resource">
+        insert into distributed_resource
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="id != null">id,</if>
+            <if test="delete != null">is_delete,</if>
+            <if test="parentId != null">parent_id,</if>
+            <if test="resourceIcon != null">resource_icon,</if>
+            <if test="resourceIconActive != null">resource_icon_active,</if>
+            <if test="resourceName != null">resource_name,</if>
+            <if test="resourceUrl != null">resource_url,</if>
+            <if test="revision != null">revision,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="explanation != null">explanation,</if>
+        </trim>
+        <trim prefix="values(" suffix=")" suffixOverrides=",">
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="id != null">#{id},</if>
+            <if test="delete != null">#{delete},</if>
+            <if test="parentId != null">#{parentId},</if>
+            <if test="resourceIcon != null">#{resourceIcon},</if>
+            <if test="resourceIconActive != null">#{resourceIconActive},</if>
+            <if test="resourceName != null">#{resourceName},</if>
+            <if test="resourceUrl != null">#{resourceUrl},</if>
+            <if test="revision != null">#{revision},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="explanation != null">#{explanation},</if>
+        </trim>
+    </insert>
+
+    <select id="resourceList" resultType="cn.toy.www.vo.ResourceVO">
+        SELECT
+            id AS id,
+            parent_id AS parentId,
+            resource_icon AS resourceIcon,
+            resource_icon_active AS resourceIconActive,
+            resource_name AS resourceName,
+            explanation AS explanation,
+            resource_url AS resourceUrl
+        FROM
+            distributed_resource
+        WHERE
+            is_delete = 0
+    </select>
+
+    <select id="findByRoleId" resultType="cn.toy.www.vo.ResourceVO" parameterType="java.lang.Long">
+        SELECT
+        r.id AS id,
+        r.parent_id AS parentId,
+        r.resource_icon AS resourceIcon,
+        resource_icon_active AS resourceIconActive,
+        r.resource_name AS resourceName,
+        r.explanation AS explanation,
+        r.resource_url AS resourceUrl
+        FROM
+        distributed_resource r, distributed_role_resource rr, distributed_role role
+        WHERE
+        r.id = rr.resource_id
+        AND rr.role_id = role.id
+        AND rr.role_id = #{roleId}
+        AND r.is_delete = 0
+        AND rr.is_delete = 0
+        AND role.is_delete = 0
+    </select>
+</mapper>

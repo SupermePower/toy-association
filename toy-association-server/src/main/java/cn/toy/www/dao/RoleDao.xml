@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.toy.www.dao.RoleDao">
+    <insert id="save" useGeneratedKeys="true" keyProperty="id" parameterType="cn.toy.www.user.Role">
+        insert into distributed_role
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="roleName != null">role_name,</if>
+            <if test="createBy!= null">create_by,</if>
+            <if test="updateBy!= null">update_By,</if>
+            create_time,
+            update_time
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="roleName != null">#{roleName},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            NOW(),
+            NOW()
+        </trim>
+    </insert>
+
+    <select id="queryList" resultType="cn.toy.www.vo.RoleVO">
+        SELECT
+        id AS id,
+        role_name AS roleName
+        FROM distributed_role
+        WHERE is_delete = 0
+    </select>
+
+    <update id="deleteById">
+        UPDATE  distributed_role SET is_delete = 1, update_by = #{updateBy}, update_time = NOW() WHERE id = #{id}
+    </update>
+
+    <update id="update" parameterType="cn.toy.www.request.role.UpdateRoleRequest">
+        UPDATE  distributed_role SET role_name = #{roleName}, update_time = NOW() WHERE id = #{id}
+    </update>
+</mapper>

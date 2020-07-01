@@ -1,0 +1,20 @@
+{
+  "medium": {
+    "properties": {
+      "id": {
+        "type": "keyword"
+      },
+      "cnName": {
+        "type": "text",
+        "analyzer": "ik_smart",
+        "search_analyzer": "ik_smart",
+        "fields": {
+          "keyword": {
+            "type": "keyword",
+            "ignore_above": 256
+          }
+        }
+      }
+    }
+  }
+}
