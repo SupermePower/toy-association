@@ -1,7 +1,7 @@
 package cn.toy.www.uaa.dao;
 
 
-import cn.toy.www.user.SecurityUser;
+import cn.youroem.www.user.SecurityUser;
 import org.springframework.stereotype.Repository;
 
 

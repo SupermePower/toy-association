@@ -13,7 +13,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @EnableEurekaClient
 @EnableFeignClients
 @RefreshScope
-@MapperScan("cn.youroem.www.dao")
+@MapperScan("cn.toy.www.dao")
 @EnableAsync
 public class ToyAssociationServerApplication {
 

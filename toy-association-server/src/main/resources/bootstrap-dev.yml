@@ -1,6 +1,6 @@
 spring:
   application:
-    name: movie-service
+    name: toy-service
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     driver-class-name: com.mysql.jdbc.Driver
@@ -39,15 +39,6 @@ spring:
       max-file-size: 100MB
       max-request-size: 100MB
       enabled: true
-  data:
-    elasticsearch:
-      cluster-name: video-search
-      cluster-nodes: 39.107.225.50:9300
-      repositories:
-        enabled: true
-  elasticsearch:
-      rest:
-        uris: ["http://39.107.225.50:9200"]
 
 
 server:
@@ -97,10 +88,4 @@ ribbon:
   eureka:
     enabled: true
 
-scanRootPath: /yundou_media
-
-excel:
-  downLoad:
-    video_title: 序号,播出平台,播放位置,播出频道列表,片名,※片源,视频水印,播出时间,版权方,签约律所
-    video_size: 2000,3000,3000,3000,3000,3000,3000,3000,3000,3000
-    video_field: serialNumber,platform,position,channel,videoName,source,hasWatermark,time,copyright,lawFirm
+scanRootPath: /toy-association

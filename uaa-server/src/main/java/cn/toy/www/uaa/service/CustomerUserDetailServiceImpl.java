@@ -2,8 +2,8 @@ package cn.toy.www.uaa.service;
 
 
 import cn.toy.www.uaa.dao.UaaUserDao;
-import cn.toy.www.user.AuthorityPoint;
-import cn.toy.www.user.SecurityUser;
+import cn.youroem.www.user.AuthorityPoint;
+import cn.youroem.www.user.SecurityUser;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetailsService;
